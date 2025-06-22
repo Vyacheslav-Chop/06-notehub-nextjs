@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Note } from "@/types/notes";
+import { Note } from "@/types/note";
 
 interface FetchNotesRes {
   notes: Note[];
