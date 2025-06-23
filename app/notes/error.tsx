@@ -8,7 +8,7 @@ interface ErrorProps {
 export default function ErrorText({ error }: ErrorProps) {
   return (
     <p className={css.text}>
-      Could not fetch the list of notes.{error.message}
+      Could not fetch the list of notes. {error.message}
     </p>
   );
 }

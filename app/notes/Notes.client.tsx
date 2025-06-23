@@ -5,21 +5,26 @@ import css from "./NotesPage.module.css";
 import NoteModal from "@/components/NoteModal/NoteModal";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
-import { fetchNotes } from "@/lib/api";
+import { fetchNotes, FetchNotesRes } from "@/lib/api";
 import NoteList from "@/components/NoteList/NoteList";
 import { useDebounce } from "use-debounce";
 
-export default function NotesClient() {
+interface NotesClientProps {
+  initialData: FetchNotesRes;
+}
+
+export default function NotesClient({initialData}: NotesClientProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const [debounceQuery] = useDebounce(searchQuery, 300);
 
-  const { data } = useQuery({
+  const { data } = useQuery<FetchNotesRes>({
     queryKey: ["notes", debounceQuery, currentPage],
     queryFn: () => fetchNotes(debounceQuery, currentPage),
     placeholderData: keepPreviousData,
+    initialData,
   });
 
   const openModal = () => setIsOpenModal(true);

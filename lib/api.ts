@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Note } from "@/types/note";
 
-interface FetchNotesRes {
+export interface FetchNotesRes {
   notes: Note[];
   totalPages: number;
 }
@@ -12,27 +12,17 @@ interface NewNote {
   tag: string;
 }
 
-interface SearchParams {
-  search?: string;
-}
-
-const myTocen = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
+const myToken = process.env.NEXT_PUBLIC_NOTEHUB_TOKEN;
 axios.defaults.baseURL = "https://notehub-public.goit.study/api";
-axios.defaults.headers.common["Authorization"] = `Bearer ${myTocen}`;
+axios.defaults.headers.common["Authorization"] = `Bearer ${myToken}`;
 
 export async function fetchNotes(
   searchText: string,
   page: number
 ): Promise<FetchNotesRes> {
-  const searchParams: SearchParams = {};
-
-  if (searchText) {
-    searchParams.search = searchText;
-  }
-
   const res = await axios.get<FetchNotesRes>("/notes", {
     params: {
-      ...searchParams,
+      ...(searchText && { search: searchText }),
       page,
       perPage: 12,
     },
